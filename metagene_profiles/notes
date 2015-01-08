@@ -12,7 +12,7 @@ Generate read count table for these transcripts.
 
 1. get well-expressed transcripts for each sample from read-counts table
 
-	Rscript parse-table.R
+	Rscript parse-table.R appris-principal-transcripts_pos_only_no_readthrough.table
 
 2. parse the output of the R script into lists of transcripts for each sample
 
