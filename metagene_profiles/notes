@@ -6,7 +6,7 @@ For each sample, get appris principal transcripts that had >100 reads mapping to
 
 Generate read count table for these transcripts.
 
-	python create_read_cont_table --bed appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed \
+	python create_read_count_table.py --bed appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed \
 	--features appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids \
 	--bam all --output appris-principal-transcripts_pos_only_no_readthrough.table
 
