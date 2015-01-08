@@ -1,8 +1,8 @@
 For each sample, get appris principal transcripts that had >100 reads mapping to them.
 
-	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { gsub(/[\";]/, "", $12); print $12 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids
+	zcat $GENCODE | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { gsub(/[\";]/, "", $12); print $12 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids
 
-	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { printf "%s\t%s\t%s\n",substr($1,4),$4,$5 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed
+	zcat $GENCODE | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { printf "%s\t%s\t%s\n",substr($1,4),$4,$5 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed
 
 Generate read count table for these transcripts.
 
