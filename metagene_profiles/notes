@@ -1,8 +1,14 @@
-For each sample, use appris principal transcripts that had >100 reads mapping to them.
+For each sample, get appris principal transcripts that had >100 reads mapping to them.
 
 	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { gsub(/[\";]/, "", $12); print $12 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids
 
 	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { printf "%s\t%s\t%s\n",substr($1,4),$4,$5 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed
+
+Generate read count table for these transcripts.
+
+	python create_read_count_table.py --bed appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed \
+	--features appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids \
+	--bam all --output appris-principal-transcripts_pos_only_no_readthrough.table
 
 1. get well-expressed transcripts for each sample from read-counts table
 
