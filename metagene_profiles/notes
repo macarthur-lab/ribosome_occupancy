@@ -1,0 +1,33 @@
+For each sample, use appris principal transcripts that had >100 reads mapping to them.
+
+	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { gsub(/[\";]/, "", $12); print $12 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.ids
+
+	zcat ../gencode/gencode | grep "appris_principal" | grep -v "readthrough_transcript" | awk ' ($3 == "transcript" && $7 == "+") { printf "%s\t%s\t%s\n",substr($1,4),$4,$5 } ' > appris_principal/positive_strand_only/no_readthrough/appris_principal_transcripts_pos_only_no_readthrough.bed
+
+1. get well-expressed transcripts for each sample from read-counts table
+
+	Rscript parse-table.R
+
+2. parse the output of the R script into lists of transcripts for each sample
+
+	python ../get_canonical_transcripts.py --feature-table appris_principal_expressed_by_sample.pos_only.no_readthrough.txt --output-dir transcripts/
+
+3. extract CDS sequences corresponding to the transcripts
+
+	for f in transcripts/*; do s=${f#*/}; s=${s%.*}; echo $s; zcat ../../gencode/gencode | fgrep -f $f | awk -f ../tableize_gencode.awk | grep "CDS" > CDS/${s}.CDS; done
+
+4. group and sort CDS sequences coming from the same transcript
+
+	python ../clean_CDS_list.py --idir CDS/ --odir cleaned/
+
+5. pull out first, middle, and last CDSs from each transcript.
+
+	for f in cleaned/*; do s=${f##*/}; s=${s%%.*}; echo $s;python ../pull_out_entries.py -i $f --istrand + --first first/bedfiles/${s}.bed --ignore-single-exon-genes 1;  done
+
+6. get coverage over these CDSs
+
+	python ../tools/run_coverageBed.py --bed appris_principal/last/bedfiles/ --bam all -d 1 --parallelize 1
+
+7. collapse 
+
+	python collapsing.py --cvg_dir appris_principal/first/cvg/19171.coverage --strand + --flank 50 --tile 0 --plot appris_principal/first/19171_first_NOT_tiled.collapsed
